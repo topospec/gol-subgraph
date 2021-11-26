@@ -1,23 +1,63 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
+description: PancakeSwap is a decentralized protocol for automated token exchange on Binance Smart Chain.
+repository: https://github.com/mendozadevs
 schema:
-  file: ./schema.graphql
+  file: ./subgraph.graphql
 dataSources:
   - kind: ethereum/contract
     name: Factory
     network: bsc
     source:
-      address: "0xb57e5B01835d943eAA072fc46296678A39842a40"
+      address: '0xb57e5B01835d943eAA072fc46296678A39842a40'
       abi: Factory
+      startBlock: 12220000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
+      file: ./src/factory.ts
       entities:
-        - PairCreated
+        - Pair
+        - Token
       abis:
         - name: Factory
-          file: ./abis/Factory.json
+          file: ./abis/factory.json
+        - name: BEP20
+          file: ./abis/BEP20.json
+        - name: BEP20NameBytes
+          file: ./abis/BEP20NameBytes.json
+        - name: BEP20SymbolBytes
+          file: ./abis/BEP20SymbolBytes.json
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
           handler: handlePairCreated
-      file: ./src/mapping.ts
+templates:
+  - kind: ethereum/contract
+    name: Pair
+    network: bsc
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/core.ts
+      entities:
+        - Pair
+        - Token
+      abis:
+        - name: Factory
+          file: ./abis/factory.json
+        - name: Pair
+          file: ./abis/pair.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleMint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleBurn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleSwap
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Sync(uint112,uint112)
+          handler: handleSync

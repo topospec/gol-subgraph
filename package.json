@@ -10,7 +10,16 @@
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 caparrosmatias/gol-subgraph"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.23.2",
-    "@graphprotocol/graph-ts": "0.23.1"
+    "@commitlint/cli": "^12.0.0",
+    "@commitlint/config-conventional": "^12.0.0",
+    "@graphprotocol/graph-cli": "^0.20.0",
+    "@graphprotocol/graph-ts": "^0.20.0",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^7.2.0",
+    "husky": "^4.3.8",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.2"
   }
 }
